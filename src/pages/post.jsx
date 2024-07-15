@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './PostPage.css';
 import { addDoc,collection } from 'firebase/firestore';
 import { db,auth } from '../config/firebase_config';
@@ -6,7 +6,7 @@ import {  useNavigate } from 'react-router-dom';
 
 
 
-const PostPage = () => {
+const PostPage = ({isauth}) => {
     let navigate=useNavigate();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -29,11 +29,16 @@ setContent(e.target.value);
         ,author:{
             name:auth.currentUser.displayName ,
             id: auth.currentUser.uid,
-    
+            photo:auth.currentUser.photoURL
         }})
         navigate('/');
   };
 
+  useEffect(()=>{
+    if(!isauth){
+        navigate("/login")
+    }
+  },[]); 
 
   return (
     <div className="post-page">
